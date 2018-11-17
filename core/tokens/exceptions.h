@@ -27,6 +27,14 @@ struct NoCharMatchException : Exception {
   using Exception::Exception;
 };
 
+struct GraphNotFoundException : Exception {
+  using Exception::Exception;
+};
+
+struct GraphNotFinalizedException : Exception {
+  using Exception::Exception;
+};
+
 }
 }
 

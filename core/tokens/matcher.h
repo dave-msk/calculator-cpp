@@ -13,7 +13,6 @@ class TokenMatcher {
   virtual bool IsEmpty() const = 0;
   virtual void Reset() = 0;
   virtual std::string GetToken() const = 0;
-
 };
 
 }  // namespace tokens
