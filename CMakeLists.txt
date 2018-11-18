@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(${PROJECT_SOURCE_DIR})
 find_package(yaml-cpp REQUIRED)
 
-add_executable(calculator main.cpp core/tokens/matcher.h core/tokens/exceptions.h core/tokens/graph_matcher.h core/tokens/graph_matcher.cc)
+add_executable(calculator main.cpp core/tokens/matcher.h core/tokens/exceptions.h core/tokens/graph_matcher.h core/tokens/graph_matcher.cc core/tokens/parser.h core/tokens/graph_parser.h core/tokens/graph_parser.cc)
 target_link_libraries(calculator yaml-cpp)

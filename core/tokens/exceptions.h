@@ -23,7 +23,7 @@ struct InvalidTokenException : Exception {
   using Exception::Exception;
 };
 
-struct NoCharMatchException : Exception {
+struct InvalidHeadCharacterException : Exception {
   using Exception::Exception;
 };
 

@@ -1,26 +1,22 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include "core/tokens/graph_parser.h"
 #include "core/tokens/matcher.h"
 #include "core/tokens/graph_matcher.h"
 
 int main() {
-  std::string test_nums{"23.96.73"};
-  std::string filename{"./numbers.yaml"};
-  auto *matcher = new calculator::tokens::GraphMatcher;
-  auto num_graph = calculator::tokens::CreateNumberGraph(filename);
-  matcher->UseGraph(num_graph);
-
-  for (const char &c : test_nums) {
-    if (!matcher->TryStep(c)) {
-      std::cout << matcher->GetToken() << std::endl;
-      matcher->Reset();
-      if (!matcher->TryStep(c))
-        return -1;
-    }
+  std::string num_config{"./numbers.yaml"};
+  std::string sym_config{"./vocabulary.txt"};
+  std::string test_expr{"23.96 * (5.0 - 4.78) / -3.61"};
+  auto parser = calculator::tokens::GraphParser(num_config, sym_config);
+  std::vector<std::string> tokens = parser.parse(test_expr);
+  std::stringstream ss;
+  for (size_t i = 0; i < tokens.size(); ++i) {
+    if (i > 0) ss << ", ";
+    ss << '"' << tokens[i] << '"';
   }
-
-  if (!matcher->IsEmpty())
-    std::cout << matcher->GetToken() << std::endl;
+  std::cout << ss.str() << std::endl;
 
   return 0;
 }

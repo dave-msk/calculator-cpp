@@ -15,15 +15,14 @@ class GraphMatcher : public TokenMatcher {
   fsm::Graph<size_t, char> *graph_ = nullptr;
   void ValidateGraph() const;
  public:
-  void UseGraph(fsm::Graph<size_t, char> *graph);
+  void BindGraph(fsm::Graph<size_t, char> *graph);
+  void UnbindGraph();
+  bool IsBoundToGraph() const;
   bool TryStep(const char &c) final;
   bool IsEmpty() const final;
   void Reset() final;
   std::string GetToken() const final;
 };
-
-fsm::Graph<size_t, char>* CreateNumberGraph(const std::string &filename);
-fsm::Graph<size_t, char>* CreateSymbolGraph(const std::string &filename);
 
 }  // namespace tokens
 }  // namespace calculator

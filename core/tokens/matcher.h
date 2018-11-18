@@ -1,5 +1,5 @@
-#ifndef CALCULATOR_CORE_TOKENS_PARSER_H
-#define CALCULATOR_CORE_TOKENS_PARSER_H
+#ifndef CALCULATOR_CORE_TOKENS_MATCHER_H
+#define CALCULATOR_CORE_TOKENS_MATCHER_H
 #include <string>
 
 
@@ -18,4 +18,4 @@ class TokenMatcher {
 }  // namespace tokens
 }  // namespace calculator
 
-#endif //CALCULATOR_CORE_TOKENS_PARSER_H
+#endif //CALCULATOR_CORE_TOKENS_MATCHER_H
