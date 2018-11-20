@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-namespace calculator {
+namespace calc {
 namespace tokens {
 
 class TokenParser {

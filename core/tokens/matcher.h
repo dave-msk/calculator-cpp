@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace calculator {
+namespace calc {
 
 namespace tokens {
 
@@ -16,6 +16,6 @@ class TokenMatcher {
 };
 
 }  // namespace tokens
-}  // namespace calculator
+}  // namespace calc
 
 #endif //CALCULATOR_CORE_TOKENS_MATCHER_H

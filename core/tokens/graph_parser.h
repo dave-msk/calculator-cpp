@@ -4,7 +4,7 @@
 #include "core/tokens/parser.h"
 #include "third_party/fsm/fsm.h"
 
-namespace calculator {
+namespace calc {
 namespace tokens {
 
 class GraphParser : public TokenParser {

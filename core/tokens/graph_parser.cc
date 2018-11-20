@@ -9,7 +9,7 @@
 #include "third_party/fsm/fsm.h"
 #include "yaml-cpp/yaml.h"
 
-namespace calculator {
+namespace calc {
 namespace tokens {
 
 static fsm::Graph<size_t, char>* CreateNumberGraph(const std::string &filename);

@@ -9,7 +9,7 @@ int main() {
   std::string num_config{"./numbers.yaml"};
   std::string sym_config{"./vocabulary.txt"};
   std::string test_expr{"23.96 * (5.0 - 4.78) / -3.61"};
-  auto parser = calculator::tokens::GraphParser(num_config, sym_config);
+  auto parser = calc::tokens::GraphParser(num_config, sym_config);
   std::vector<std::string> tokens = parser.parse(test_expr);
   std::stringstream ss;
   for (size_t i = 0; i < tokens.size(); ++i) {

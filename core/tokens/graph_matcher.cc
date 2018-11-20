@@ -5,7 +5,7 @@
 #include "core/tokens/graph_matcher.h"
 
 
-namespace calculator {
+namespace calc {
 namespace tokens {
 
 
@@ -59,4 +59,4 @@ std::string GraphMatcher::GetToken() const {
 
 
 }  // namespace tokens
-}  // namespace calculator
+}  // namespace calc

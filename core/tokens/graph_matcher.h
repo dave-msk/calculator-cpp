@@ -7,7 +7,7 @@
 #include "third_party/fsm/fsm.h"
 
 
-namespace calculator {
+namespace calc {
 namespace tokens {
 
 class GraphMatcher : public TokenMatcher {
@@ -25,7 +25,7 @@ class GraphMatcher : public TokenMatcher {
 };
 
 }  // namespace tokens
-}  // namespace calculator
+}  // namespace calc
 
 
 #endif  // CALCULATOR_CORE_TOKENS_FSM_MATCHER_H
