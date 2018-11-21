@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 #include "core/tokens/exceptions.h"
-#include "core/tokens/graph_parser.h"
+#include "core/tokens/graph_tokenizer.h"
 #include "core/tokens/graph_matcher.h"
 #include "third_party/fsm/fsm.h"
 #include "yaml-cpp/yaml.h"
@@ -15,24 +15,24 @@ namespace tokens {
 static fsm::Graph<size_t, char>* CreateNumberGraph(const std::string &filename);
 static fsm::Graph<size_t, char>* CreateSymbolGraph(const std::string &filename);
 
-void GraphParser::BindGraph(const char &c) {
+void GraphTokenizer::BindGraph(const char &c) {
   if (matcher.IsBoundToGraph()) return;
   if (c == '.' or std::isdigit(c)) matcher.BindGraph(num_graph_);
   else matcher.BindGraph(sym_graph_);
 }
 
-GraphParser::GraphParser(const std::string &num_config,
+GraphTokenizer::GraphTokenizer(const std::string &num_config,
                          const std::string &sym_config) {
   num_graph_ = CreateNumberGraph(num_config);
   sym_graph_ = CreateSymbolGraph(sym_config);
 }
 
-GraphParser::~GraphParser() {
+GraphTokenizer::~GraphTokenizer() {
   delete num_graph_;
   delete sym_graph_;
 }
 
-std::vector<std::string> GraphParser::parse(const std::string &raw_expr) {
+std::vector<std::string> GraphTokenizer::Tokenize(const std::string &raw_expr) {
   std::vector<std::string> tokens;
 
   // Parse char by char
