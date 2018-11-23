@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <iostream>
 #include "yaml-cpp/yaml.h"
-#include "core/tokens/graph_matcher.h"
+#include "graph_matcher.h"
 
 
 namespace calc {

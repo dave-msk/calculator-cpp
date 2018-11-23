@@ -1,22 +1,28 @@
-
-#include <queue>
+#include <string>
 #include "core/expression/bin_expr_tree/binary_tree_parser.h"
+#include "core/expression/bin_expr_tree/nodes/factories.h"
 #include "core/expression/bin_expr_tree/nodes/node.h"
 #include "core/expression/bin_expr_tree/nodes/type.h"
 
 namespace calc {
 namespace expr {
 
-static std::queue<Node*> TokensToNodes(const std::vector<std::string> &tokens);
+static Node* CreateNode(const std::string &token, const Type &type);
+
+BinaryTreeParser::BinaryTreeParser(
+    const calc::expr::Tagger *tagger) : tagger(tagger) {}
+
+BinaryTreeParser::~BinaryTreeParser() {
+  delete tagger;
+}
 
 Expression* BinaryTreeParser::Parse(const std::vector<std::string> &tokens) {
-  auto nodes = TokensToNodes(tokens);
 
+  const std::vector<Type> types = tagger->TagTokens(tokens);
   Node *curr_node = new Node(Type::NONE, Precedence::ONE);
 
-  while (!nodes.empty()) {
-    Node *new_node = nodes.front();
-    nodes.pop();
+  for (size_t i = 0; i < tokens.size(); ++i) {
+    Node *new_node = CreateNode(tokens.at(i), types.at(i));
 
     if (new_node->type != Type::OPEN_BRACKET) {
       // Step 4
@@ -58,6 +64,28 @@ Expression* BinaryTreeParser::Parse(const std::vector<std::string> &tokens) {
 
   return curr_node;
 }
+
+static Node* CreateNode(const std::string &token, const Type &type) {
+  switch (type) {
+    case Type::NUMBER:
+      return CreateNumberNode(token);
+    case Type::OPEN_BRACKET:
+      return CreateOpenBracketNode(token);
+    case Type::CLOSE_BRACKET:
+      return CreateCloseBracketNode(token);
+    case Type::BINARY_OP:
+      return CreateBinaryOpNode(token);
+    case Type::PREFIX_OP:
+      return CreatePrefixOpNode(token);
+    case Type::POSTFIX_OP:
+      return CreatePostfixOpNode(token);
+    case Type::FUNCTION:
+      return CreateFunctionNode(token);
+    default:
+      return nullptr;
+  }
+}
+
 
 }
 }

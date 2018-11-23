@@ -1,0 +1,21 @@
+#include <string>
+#include "core/expression/bin_expr_tree/nodes/node.h"
+#include "core/expression/bin_expr_tree/nodes/number/number.h"
+#include "core/expression/bin_expr_tree/nodes/number/number_node.h"
+
+namespace calc {
+namespace expr {
+
+Node* CreateNumberNode(const std::string &token) {
+  try {
+    double value = std::stod(token);
+    return new NumberNode(value);
+  } catch (std::invalid_argument&) {}
+
+  const Number *number = Number::Get(token);
+  if (number == nullptr) return nullptr;
+  return new NumberNode(number->value);
+}
+
+}
+}

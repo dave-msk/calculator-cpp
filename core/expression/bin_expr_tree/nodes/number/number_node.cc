@@ -1,4 +1,4 @@
-#include "core/expression/bin_expr_tree/nodes/number_node.h"
+#include "core/expression/bin_expr_tree/nodes/number/number_node.h"
 #include "core/expression/bin_expr_tree/nodes/precedence.h"
 
 namespace calc {

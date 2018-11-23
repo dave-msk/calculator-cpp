@@ -1,4 +1,4 @@
-#include "core/expression/bin_expr_tree/nodes/binary_op_node.h"
+#include "core/expression/bin_expr_tree/nodes/binary_op/binary_op_node.h"
 #include "core/expression/bin_expr_tree/nodes/node.h"
 #include "core/expression/bin_expr_tree/nodes/type.h"
 #include "core/expression/bin_expr_tree/nodes/precedence.h"

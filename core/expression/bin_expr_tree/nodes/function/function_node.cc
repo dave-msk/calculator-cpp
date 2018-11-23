@@ -1,7 +1,7 @@
 #include "core/expression/bin_expr_tree/nodes/node.h"
 #include "core/expression/bin_expr_tree/nodes/type.h"
 #include "core/expression/bin_expr_tree/nodes/precedence.h"
-#include "core/expression/bin_expr_tree/nodes/function_node.h"
+#include "function_node.h"
 
 namespace calc {
 namespace expr {

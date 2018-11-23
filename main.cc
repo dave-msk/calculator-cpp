@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "core/tokens/graph_tokenizer.h"
+#include "core/tokens/fsm_graph/graph_tokenizer.h"
 #include "core/tokens/matcher.h"
-#include "core/tokens/graph_matcher.h"
+#include "core/tokens/fsm_graph/graph_matcher.h"
 
 int main() {
   std::string num_config{"./numbers.yaml"};

@@ -1,11 +1,7 @@
-#include <cctype>
 #include <fstream>
 #include <unordered_map>
-#include <sstream>
-#include <string>
-#include "core/tokens/exceptions.h"
-#include "core/tokens/graph_tokenizer.h"
-#include "core/tokens/graph_matcher.h"
+#include "core/tokens/factories.h"
+#include "core/tokens/fsm_graph/graph_tokenizer.h"
 #include "third_party/fsm/fsm.h"
 #include "yaml-cpp/yaml.h"
 
@@ -14,22 +10,21 @@ namespace tokens {
 
 static fsm::Graph<size_t, char>* CreateNumberGraph(const std::string &filename);
 static fsm::Graph<size_t, char>* CreateSymbolGraph(const std::string &filename);
+static fsm::Graph<size_t, char>* CreateSymbolGraph(
+    const std::unordered_set<std::string> &tokens);
 
-void GraphTokenizer::BindGraph(const char &c) {
-  if (matcher.IsBoundToGraph()) return;
-  if (c == '.' or std::isdigit(c)) matcher.BindGraph(num_graph_);
-  else matcher.BindGraph(sym_graph_);
+Tokenizer* CreateGraphTokenizer(const std::string &num_config,
+                                const std::string &sym_config) {
+  auto num_graph = CreateNumberGraph(num_config);
+  auto sym_graph = CreateSymbolGraph(sym_config);
+  return new GraphTokenizer(num_graph, sym_graph);
 }
 
-GraphTokenizer::GraphTokenizer(const std::string &num_config,
-                         const std::string &sym_config) {
-  num_graph_ = CreateNumberGraph(num_config);
-  sym_graph_ = CreateSymbolGraph(sym_config);
-}
-
-GraphTokenizer::~GraphTokenizer() {
-  delete num_graph_;
-  delete sym_graph_;
+Tokenizer* CreateGraphTokenizer(const std::string &num_config,
+                                const std::unordered_set<std::string> &tokens) {
+  auto num_graph = CreateNumberGraph(num_config);
+  auto sym_graph = CreateSymbolGraph(tokens);
+  return new GraphTokenizer(num_graph, sym_graph);
 }
 
 std::vector<std::string> GraphTokenizer::Tokenize(const std::string &raw_expr) {
@@ -102,19 +97,27 @@ fsm::Graph<size_t, char>* CreateNumberGraph(const std::string &filename) {
 }
 
 fsm::Graph<size_t, char>* CreateSymbolGraph(const std::string &filename) {
+  std::unordered_set<std::string> tokens{};
+  std::ifstream file(filename);
+  std::string line;
+  while (std::getline(file, line)) tokens.insert(line);
+  return CreateSymbolGraph(tokens);
+}
+
+fsm::Graph<size_t, char>* CreateSymbolGraph(
+    const std::unordered_set<std::string> &tokens) {
   auto *graph = new fsm::Graph<size_t, char>(0);
   size_t next_id = 1;
 
-  std::ifstream file(filename);
-  std::string line;
-  while (std::getline(file, line)) {
-    for (const char &c : line) {
+  for (const std::string &token : tokens) {
+    for (const char &c : token) {
       if (!graph->HasStep(c)) graph->AddEdge(c, next_id++);
       graph->Step(c);
     }
     graph->SetTerminal();
     graph->Reset();
   }
+
   const char ws = ' ';
   if (!graph->HasStep(ws)) {
     graph->AddEdge(ws, next_id);
@@ -124,7 +127,6 @@ fsm::Graph<size_t, char>* CreateSymbolGraph(const std::string &filename) {
   graph->Finalize();
   return graph;
 }
-
 
 
 }

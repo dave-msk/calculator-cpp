@@ -1,6 +1,9 @@
 #ifndef CALCULATOR_CORE_TOKENS_GRAPH_PARSER_H_
 #define CALCULATOR_CORE_TOKENS_GRAPH_PARSER_H_
-#include "core/tokens/graph_matcher.h"
+#include <string>
+#include <unordered_set>
+#include <vector>
+#include "graph_matcher.h"
 #include "core/tokens/tokenizer.h"
 #include "third_party/fsm/fsm.h"
 
@@ -14,8 +17,8 @@ class GraphTokenizer : public Tokenizer {
   GraphMatcher matcher;
   void BindGraph(const char &c);
  public:
-  GraphTokenizer(const std::string &num_config,
-              const std::string &sym_config);
+  GraphTokenizer(fsm::Graph<size_t, char> *num_graph_,
+                 fsm::Graph<size_t, char> *sym_graph);
   ~GraphTokenizer();
   std::vector<std::string> Tokenize(const std::string &raw_expr) final;
 };
