@@ -1,46 +1,48 @@
+#include <memory>
 #include <string>
 #include "core/expression/bin_expr_tree/binary_tree_parser.h"
-#include "core/expression/bin_expr_tree/nodes/factories.h"
-#include "core/expression/bin_expr_tree/nodes/node.h"
-#include "core/expression/bin_expr_tree/nodes/type.h"
+#include "core/expression/bin_expr_tree/components/nodes/factories.h"
+#include "core/expression/bin_expr_tree/components/nodes/node.h"
+#include "core/expression/bin_expr_tree/components/type.h"
 
 namespace calc {
 namespace expr {
 
-static Node* CreateNode(const std::string &token, const Type &type);
+static std::shared_ptr<Node> CreateNode(const std::string &token,
+                                        const Type &type);
 
 BinaryTreeParser::BinaryTreeParser(
-    const calc::expr::Tagger *tagger) : tagger(tagger) {}
+    std::unique_ptr<Tagger> tagger) : tagger(std::move(tagger)) {}
 
-BinaryTreeParser::~BinaryTreeParser() {
-  delete tagger;
-}
+BinaryTreeParser::~BinaryTreeParser() = default;
 
-Expression* BinaryTreeParser::Parse(const std::vector<std::string> &tokens) {
+std::shared_ptr<Expression> BinaryTreeParser::Parse(
+    const std::vector<std::string> &tokens) {
 
   const std::vector<Type> types = tagger->TagTokens(tokens);
-  Node *curr_node = new Node(Type::NONE, Precedence::ONE);
+  auto root_node = std::make_shared<Node>(Type::NONE, Precedence::ONE);
+  auto curr_node = root_node;
 
   for (size_t i = 0; i < tokens.size(); ++i) {
-    Node *new_node = CreateNode(tokens.at(i), types.at(i));
+    std::shared_ptr<Node> new_node = CreateNode(tokens.at(i), types.at(i));
 
     if (new_node->type != Type::OPEN_BRACKET) {
       // Step 4
-      if (new_node->precedence.left_associate)
-        while (curr_node->precedence >= new_node->precedence)
-          curr_node = curr_node->parent;
+      if (new_node->order.IsLeft())
+        while (curr_node->order >= new_node->order)
+          curr_node = curr_node->parent.lock();
       else
-        while (curr_node->precedence > new_node->precedence)
-          curr_node = curr_node->parent;
+        while (curr_node->order > new_node->order)
+          curr_node = curr_node->parent.lock();
     }
 
     if (new_node->type == Type::CLOSE_BRACKET) {
-      Node *parent = curr_node->parent;
+      // Step 5
+      auto parent = curr_node->parent.lock();
       parent->right = curr_node->right;
       parent->right->parent = parent;
-      curr_node->clear();
-      delete curr_node;
-      delete new_node;
+//      curr_node->clear();
+      // Step 6
       curr_node = parent;
       continue;
     }
@@ -53,19 +55,18 @@ Expression* BinaryTreeParser::Parse(const std::vector<std::string> &tokens) {
     curr_node = new_node;
   }
 
-  while (curr_node->parent && curr_node->parent->type != Type::NONE)
-    curr_node = curr_node->parent;
-
-  if (curr_node->parent) {
-    curr_node->parent->clear();
-    delete curr_node->parent;
-    curr_node->parent = nullptr;
+  while (!(curr_node->parent.expired())) {
+    auto parent_node = curr_node->parent.lock();
+    if (parent_node->type == Type::NONE) break;
+    curr_node = std::move(parent_node);
   }
+  root_node = curr_node;
 
-  return curr_node;
+  return root_node;
 }
 
-static Node* CreateNode(const std::string &token, const Type &type) {
+static std::shared_ptr<Node> CreateNode(const std::string &token,
+                                        const Type &type) {
   switch (type) {
     case Type::NUMBER:
       return CreateNumberNode(token);
