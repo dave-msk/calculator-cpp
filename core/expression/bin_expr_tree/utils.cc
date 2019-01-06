@@ -23,6 +23,7 @@ const std::unordered_set<std::string> GetAllTokens() {
   tokens.insert(post_tokens.begin(), post_tokens.end());
   auto pre_tokens = PrefixOp::GetTokens();
   tokens.insert(pre_tokens.begin(), pre_tokens.end());
+  tokens.insert({"(", ")", " "});
 
   return tokens;
 }
