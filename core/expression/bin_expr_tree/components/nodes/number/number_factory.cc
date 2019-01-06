@@ -1,5 +1,6 @@
 #include <memory>
 #include <string>
+#include "core/expression/bin_expr_tree/components/nodes/factories.h"
 #include "core/expression/bin_expr_tree/components/nodes/node.h"
 #include "core/expression/bin_expr_tree/components/nodes/number/number.h"
 #include "core/expression/bin_expr_tree/components/nodes/number/number_node.h"

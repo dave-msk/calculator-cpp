@@ -16,12 +16,9 @@ add_executable(calculator main.cc
         core/tokens/fsm_graph/graph_matcher.h
         core/tokens/fsm_graph/graph_matcher.cc
         core/tokens/tokenizer.h
-        core/tokens/fsm_graph/graph_tokenizer.h
-        core/tokens/fsm_graph/graph_tokenizer.cc
         core/expression/bin_expr_tree/components/nodes/node.cc
         core/expression/bin_expr_tree/components/nodes/node.h
         core/expression/bin_expr_tree/components/type.h
-        core/expression/bin_expr_tree/components/precedence.cc
         core/expression/bin_expr_tree/components/precedence.h
         core/expression/bin_expr_tree/components/nodes/number/number_node.cc
         core/expression/bin_expr_tree/components/nodes/number/number_node.h
@@ -58,13 +55,11 @@ add_executable(calculator main.cc
         core/expression/bin_expr_tree/components/taggers/tagger.h
         core/expression/bin_expr_tree/components/taggers/simple_tagger.cc
         core/expression/bin_expr_tree/components/taggers/simple_tagger.h
-        core/tokens/factories.h
-        core/tokens/factories.cc
         core/expression/bin_expr_tree/utils.h
         core/expression/bin_expr_tree/utils.cc
         core/expression/factories.h
         core/expression/factories.cc
         core/expression/bin_expr_tree/components/order.h
         core/expression/bin_expr_tree/components/order.cc
-        core/expression/bin_expr_tree/components/associativity.h)
+        core/expression/bin_expr_tree/components/associativity.h core/tokens/tokenizer.cc)
 target_link_libraries(calculator yaml-cpp)

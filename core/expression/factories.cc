@@ -1,3 +1,4 @@
+#include <memory>
 #include "core/expression/factories.h"
 #include "core/expression/parser.h"
 #include "core/expression/bin_expr_tree/binary_tree_parser.h"
@@ -7,10 +8,10 @@
 namespace calc {
 namespace expr {
 
-Parser* CreateBinaryTreeParser() {
+std::unique_ptr<Parser> CreateBinaryTreeParser() {
   // TODO: Decouple tagger
-  Tagger *tagger = new SimpleTagger();
-  return new BinaryTreeParser(tagger);
+  auto tagger = std::make_unique<SimpleTagger>();
+  return std::make_unique<BinaryTreeParser>(std::move(tagger));
 }
 
 }
